@@ -36,51 +36,17 @@ def draw_grids_and_labels():
         textAlign(CENTER)
         text(t, x, -outstanding)
 
-  # TODO uncomment and make it work
-  # pushMatrix()
-  # translate(10, top_margin)
-  #
-  # # current_h = None
-  #
-  #
-  # # draw hour label
-  # if h != current_h:
-  #   current_h = h
-  #   with pushStyle():
-  #     fill('#999999')
-  #     text(h, 0, y + 14)
-  #
-  #
-  # popMatrix()
-  #
-  # # draw top date label and legend
-  # with pushMatrix():
-  #   translate(0, 20)
-  #
-  #   center = width / 2
-  #   with pushStyle():
-  #     textAlign(CENTER)
-  #     fill('#333333')
-  #     text(today, center, 0)
-  #
-  #   with pushStyle():
-  #     textAlign(LEFT)
-  #     fill('#999999')
-  #     text('Connection:', center + 360, 0)
-  #
-  #   with pushStyle():
-  #     noStroke()
-  #     fill('#ddddee')
-  #     rect(center + 440, -12, 2, 18)
-  #     text('success', center + 445, 0)
-  #
-  #   with pushStyle():
-  #     noStroke()
-  #     fill('#ff6000')
-  #     rect(center + 505, -12, 2, 18)
-  #     text('failed', center + 510, 0)
-  #
-  #
+
+  with pushMatrix():
+    translate(-5, -10)
+
+    for h in range(0, 24):
+      translate(0, ROW_HEIGHT)
+
+      with pushStyle():
+        fill('#999999')
+        textAlign(RIGHT)
+        text('%02d' % h, 0, 0)
 
 
 def update_graph_with(connection_status, timestamp):
