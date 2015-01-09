@@ -18,11 +18,27 @@ PICTURE_HEIGHT      = CANVAS_HEIGHT + MARGIN_TOP  + MARGIN_RIGHT_BOTTOM
 current_date = dt.now().strftime('%Y-%m-%d')
 
 
+def draw_title(current_date):
+  # title
+  with pushMatrix():
+    translate(PICTURE_WIDTH / 2, 30)
+
+    with pushStyle():
+      fill('#999999')
+      textSize(16)
+      textAlign(CENTER)
+      text(current_date, 0, 0)
+
+
 def draw_grids_and_labels():
-  # draw 5-minutes grid
+  # grid line should stand 5px outside canvas on each side
   outstanding      = 5
   grid_line_height = CANVAS_HEIGHT + (2 * outstanding)
 
+  # with pushStyle doesn't work for text size
+  textSize(12)
+  
+  # vertical grid minutes labels
   ticks = ['%02d' % i for i in range(0, 61, 5)]
   with pushMatrix():
     translate(0, -outstanding)
@@ -39,7 +55,7 @@ def draw_grids_and_labels():
         text(t, x, -outstanding)
 
 
-  # draw hourly hirizontal grid labels
+  # horizontal grid hours labels
   with pushMatrix():
     translate(-10, 0)
 
@@ -83,9 +99,11 @@ def setup():
   size(PICTURE_WIDTH, PICTURE_HEIGHT)
   frameRate(1.0 / FPS)
 
-  translate(MARGIN_LEFT, MARGIN_TOP)
 
   background(255)
+  draw_title(current_date)
+
+  translate(MARGIN_LEFT, MARGIN_TOP)
   draw_grids_and_labels()
 
   # TODO reimplement it with jdbc sqlite interface
@@ -116,7 +134,12 @@ def draw():
 
     current_date = today
     background(255)
-    draw_grids_and_labels()
+    # an ugly way of keeping global canvas offset that doesn't apply to title
+    with pushMatrix():
+      translate(MARGIN_LEFT, MARGIN_TOP)
+      draw_title(current_date)
+
+    draw_grids_and_labels(current_date)
 
   # test connection
   try:
