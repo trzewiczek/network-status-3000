@@ -23,6 +23,7 @@ def draw_grids_and_labels():
   outstanding      = 5
   grid_line_height = CANVAS_HEIGHT + (2 * outstanding)
 
+  # draw vertical grid minutes labels
   ticks = ['%02d' % i for i in range(0, 61, 5)]
   with pushMatrix():
     translate(0, -outstanding)
@@ -39,7 +40,7 @@ def draw_grids_and_labels():
         text(t, x, -outstanding)
 
 
-  # draw hourly hirizontal grid labels
+  # draw horizontal grid hours labels
   with pushMatrix():
     translate(-10, 0)
 
@@ -83,10 +84,10 @@ def setup():
   size(PICTURE_WIDTH, PICTURE_HEIGHT)
   frameRate(1.0 / FPS)
 
-  translate(MARGIN_LEFT, MARGIN_TOP)
-
   background(255)
-  draw_grids_and_labels()
+  with pushMatrix():
+    translate(MARGIN_LEFT, MARGIN_TOP)
+    draw_grids_and_labels()
 
   # TODO reimplement it with jdbc sqlite interface
   try:
@@ -96,7 +97,9 @@ def setup():
         timestamp = dt.strptime(row[0][:-7], '%Y-%m-%d %H:%M:%S')
         status    = bool(int(row[1]))
 
-        update_graph_with(status, timestamp)
+        with pushMatrix():
+          translate(MARGIN_LEFT, MARGIN_TOP)
+          update_graph_with(status, timestamp)
 
   except IOError:
     print "No data for %s yet" % current_date
@@ -114,7 +117,9 @@ def draw():
 
     current_date = today
     background(255)
-    draw_grids_and_labels()
+    with pushMatrix():
+      translate(MARGIN_LEFT, MARGIN_TOP)
+      draw_grids_and_labels()
 
   # test connection
   try:
@@ -125,6 +130,8 @@ def draw():
   except urllib2.URLError:
     connection_status = False
 
-  update_graph_with(connection_status, timestamp)
+  with pushMatrix():
+    translate(MARGIN_LEFT, MARGIN_TOP)
+    update_graph_with(connection_status, timestamp)
 
   log(connection_status, timestamp)
