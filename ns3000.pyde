@@ -4,14 +4,16 @@ import urllib2
 
 from datetime import datetime as dt
 
-FPS            = 3
-LINE_HEIGHT    = 20
-ROW_HEIGHT     = 25
-CANVAS_WIDTH   = 1200             # once every 3 seconds → 1200 points an hour
-CANVAS_HEIGHT  = 24 * ROW_HEIGHT  # one row for each of 24 hours a day
-MARGIN         = 25
-PICTURE_WIDTH  = CANVAS_WIDTH  + (2 * MARGIN)
-PICTURE_HEIGHT = CANVAS_HEIGHT + (2 * MARGIN)
+FPS                 = 3
+LINE_HEIGHT         = 20
+ROW_HEIGHT          = 25
+CANVAS_WIDTH        = 1200             # once every 3 seconds → 1200 points an hour
+CANVAS_HEIGHT       = 24 * ROW_HEIGHT  # one row for each of 24 hours a day
+MARGIN_LEFT         = 50
+MARGIN_TOP          = 75
+MARGIN_RIGHT_BOTTOM = 25
+PICTURE_WIDTH       = CANVAS_WIDTH  + MARGIN_LEFT + MARGIN_RIGHT_BOTTOM
+PICTURE_HEIGHT      = CANVAS_HEIGHT + MARGIN_TOP  + MARGIN_RIGHT_BOTTOM
 
 current_date = dt.now().strftime('%Y-%m-%d')
 
@@ -21,6 +23,7 @@ def draw_grids_and_labels():
   outstanding      = 5
   grid_line_height = CANVAS_HEIGHT + (2 * outstanding)
 
+  # draw vertical grid minutes labels
   ticks = ['%02d' % i for i in range(0, 61, 5)]
   with pushMatrix():
     translate(0, -outstanding)
@@ -37,8 +40,9 @@ def draw_grids_and_labels():
         text(t, x, -outstanding)
 
 
+  # draw horizontal grid hours labels
   with pushMatrix():
-    translate(-5, -10)
+    translate(-10, 0)
 
     for h in range(0, 24):
       translate(0, ROW_HEIGHT)
@@ -46,7 +50,7 @@ def draw_grids_and_labels():
       with pushStyle():
         fill('#999999')
         textAlign(RIGHT)
-        text('%02d' % h, 0, 0)
+        text('%02d' % h, 0, -10)
 
 
 def update_graph_with(connection_status, timestamp):
@@ -82,7 +86,7 @@ def setup():
 
   background(255)
   with pushMatrix():
-    translate(MARGIN, MARGIN)
+    translate(MARGIN_LEFT, MARGIN_TOP)
     draw_grids_and_labels()
 
   # TODO reimplement it with jdbc sqlite interface
@@ -94,7 +98,7 @@ def setup():
         status    = bool(int(row[1]))
 
         with pushMatrix():
-          translate(MARGIN, MARGIN)
+          translate(MARGIN_LEFT, MARGIN_TOP)
           update_graph_with(status, timestamp)
 
   except IOError:
@@ -114,7 +118,7 @@ def draw():
     current_date = today
     background(255)
     with pushMatrix():
-      translate(MARGIN, MARGIN)
+      translate(MARGIN_LEFT, MARGIN_TOP)
       draw_grids_and_labels()
 
   # test connection
@@ -127,7 +131,7 @@ def draw():
     connection_status = False
 
   with pushMatrix():
-    translate(MARGIN, MARGIN)
+    translate(MARGIN_LEFT, MARGIN_TOP)
     update_graph_with(connection_status, timestamp)
 
   log(connection_status, timestamp)
