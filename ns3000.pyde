@@ -4,6 +4,7 @@ import urllib2
 
 from datetime import datetime as dt
 
+# TODO make it work on 1 FPS speed with presentation layer made of aggregated data
 FPS                 = 3
 LINE_HEIGHT         = 20
 ROW_HEIGHT          = 25
