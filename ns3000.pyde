@@ -37,7 +37,7 @@ def draw_grids_and_labels():
 
   # with pushStyle doesn't work for text size
   textSize(12)
-  
+
   # vertical grid minutes labels
   ticks = ['%02d' % i for i in range(0, 61, 5)]
   with pushMatrix():
@@ -139,7 +139,7 @@ def draw():
       translate(MARGIN_LEFT, MARGIN_TOP)
       draw_title(current_date)
 
-    draw_grids_and_labels(current_date)
+    draw_grids_and_labels()
 
   # test connection
   try:
