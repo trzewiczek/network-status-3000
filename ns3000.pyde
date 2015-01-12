@@ -137,7 +137,7 @@ def draw():
     background(255)
     # an ugly way of keeping global canvas offset that doesn't apply to title
     with pushMatrix():
-      translate(MARGIN_LEFT, MARGIN_TOP)
+      translate(-MARGIN_LEFT, -MARGIN_TOP)
       draw_title(current_date)
 
     draw_grids_and_labels()
